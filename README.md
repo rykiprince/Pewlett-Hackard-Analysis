@@ -40,12 +40,36 @@ Therefore, there are 72458 roles will need to be filled as the "silver tsunami" 
 ### Are there enough qualified, retirement-ready employees in the departments to mentor the next generation of Pewlett Hackard employees?
 Running additional queries below:
 ```SQL
-SELECT COUNT(emp_no),
-title
--- INTO mentorship_title
-FROM mentorship_eligibilty
-GROUP BY title
-ORDER BY COUNT(emp_no) DESC;
+-- mentorship eligibility by department
+SELECT COUNT(e.emp_no),
+d.dept_name
+INTO mentorship_by_dept
+FROM dept_emp AS de
+	INNER JOIN employees AS e
+		ON (de.emp_no = e.emp_no)
+	INNER JOIN departments AS d
+		ON (de.dept_no = d.dept_no)
+WHERE (de.to_date = '9999-01-01')
+AND (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+GROUP BY dept_name
+ORDER BY COUNT DESC;
+
+-- potential retirees by department
+SELECT COUNT(de.emp_no),
+d.dept_name
+INTO retiring_dept
+FROM dept_emp AS de
+	INNER JOIN employees AS e
+		ON (de.emp_no = e.emp_no)
+	INNER JOIN departments AS d
+		ON (de.dept_no = d.dept_no)
+WHERE (de.to_date = '9999-01-01')
+AND (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+GROUP BY dept_name
+ORDER BY COUNT DESC;
 ```
-We get the number of eligible mentorship employees by each title
+We get the number of eligible mentorship employees by each departments versus retiring employees count per departments:
+![mentorship_by_dept](https://user-images.githubusercontent.com/66225050/128624035-c56aea2a-f72b-477e-8971-9fc925b4847c.png)![retiring_dept](https://user-images.githubusercontent.com/66225050/128624041-1038e23a-08f9-4f8d-9119-c06b0f88845a.png)
+
+
 
