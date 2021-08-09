@@ -7,11 +7,25 @@ Helping the company management to prepare for the upcoming "silver tsunami". Fin
 
 ![Screen Shot 2021-08-07 at 1 47 08 PM](https://user-images.githubusercontent.com/66225050/128613676-24003538-5b16-4073-ad19-68cdb4e55b65.png)
 
-- There are 90398 employees are potential to retire.
-- Most of the potential retirees are Senior Engineer and Senior Staff, which are 29414 and 28254 of them respectively. Total number of potential retirees in these 2 titles accounts for more than half of the whole retiring employee group. However, there are only **2** employees titled as **Manager** are going to be retire, which stands in sharp contrast to all other titles.
+- There are **90398** employees are eligible to retire.
+- Most of the eligible retirees are Senior Engineer and Senior Staff, which are 29414 and 28254 of them respectively. Total number of potential retirees in these 2 titles accounts for more than half of the whole retiring employee group. However, there are only **2** employees titled as **Manager** are going to be retire, which stands in sharp contrast to all other titles.
+- But, these potential retirees includes employees had left. Excluding the left employees we got: total **72458** current employees are potential to be retired. Script and table are as following:
+```SQL
+SELECT COUNT(emp_no),
+title
+INTO current_retire_titles
+FROM retirement_titles
+WHERE (to_date = '9999-01-01')
+GROUP BY title
+ORDER BY COUNT(emp_no) DESC;
+```
+![Screen Shot 2021-08-07 at 3 50 14 PM](https://user-images.githubusercontent.com/66225050/128650410-ad5b46f4-81f2-43f9-81d2-c3fe24a31569.png)
 
-After identified the mentorship eligibility, we got a table that holds the employees who are eligible to participate in a mentorship program:
+After identified the mentorship eligibility, we got a table that holds the employees who are eligible to participate in a mentorship program. Grouping them by job titles we can get:
 
+![mentor_per_role](https://user-images.githubusercontent.com/66225050/128652247-33d2badf-7281-4ee4-8de4-46b959a79ff9.png)
+
+- There are total **1549** current employees are eligible to participate mentorship program.
 
 ## Summary
 ### How many roles will need to be filled as the "silver tsunami" begins to make an impact?
@@ -71,5 +85,16 @@ ORDER BY COUNT DESC;
 We get the number of eligible mentorship employees by each departments versus retiring employees count per departments:
 ![mentorship_by_dept](https://user-images.githubusercontent.com/66225050/128624035-c56aea2a-f72b-477e-8971-9fc925b4847c.png)![retiring_dept](https://user-images.githubusercontent.com/66225050/128624041-1038e23a-08f9-4f8d-9119-c06b0f88845a.png)
 
+Then, perform the aggregate and get the Roles per Mentor ratio as following:
+```SQL
+SELECT CAST(CAST(rd.COUNT AS FLOAT)/CAST(md.COUNT AS FLOAT) AS DECIMAL(4,2)) AS "Roles per Mentor",
+md.dept_name AS "Department"
+FROM mentorship_by_dept AS md
+INNER JOIN retiring_dept AS rd
+ON (md.dept_name = rd.dept_name);
+```
+![roles_per_mentor](https://user-images.githubusercontent.com/66225050/128649872-cb0d4060-26d5-4bb9-b97b-93fe1fa940b7.png)
+
+Base on the ratio we get from above, each eligible retirement_ready employee will mentor about 40 to 60 next generation of Pewlett Hackard employees per department.
 
 
