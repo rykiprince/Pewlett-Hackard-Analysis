@@ -83,6 +83,7 @@ GROUP BY dept_name
 ORDER BY COUNT DESC;
 ```
 We get the number of eligible mentorship employees by each departments versus retiring employees count per departments:
+
 ![mentorship_by_dept](https://user-images.githubusercontent.com/66225050/128624035-c56aea2a-f72b-477e-8971-9fc925b4847c.png)![retiring_dept](https://user-images.githubusercontent.com/66225050/128624041-1038e23a-08f9-4f8d-9119-c06b0f88845a.png)
 
 Then, perform the aggregate and get the Roles per Mentor ratio as following:
